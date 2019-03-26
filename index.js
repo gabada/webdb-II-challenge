@@ -16,6 +16,10 @@ const server = express();
 server.use(express.json());
 server.use(helmet());
 
+const errors = {
+  '19': 'Another record with that value exists'
+};
+
 // endpoints here
 server.post('/api/zoos', async (req, res) => {
   try {
@@ -25,7 +29,8 @@ server.post('/api/zoos', async (req, res) => {
       .first();
     res.status(201).json(zoo);
   } catch (error) {
-    res.status(500).json(error);
+    const message = errors[error.errno] || 'We ran into an error';
+    res.status(500).json({ message });
   }
 });
 
