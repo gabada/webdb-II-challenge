@@ -28,8 +28,10 @@ server.get('/api/zoos', async (req, res) => {
 
 server.get('/api/zoos/:id', async (req, res) => {
   try {
-    const zoo = await db('zoos').where({ id: req.params.id });
-    if (zoo.length < 1) {
+    const zoo = await db('zoos')
+      .where({ id: req.params.id })
+      .first();
+    if (zoo === undefined) {
       res.status(404).json({ message: 'The selected Zoo does not exist' });
     } else {
       res.status(200).json(zoo);
